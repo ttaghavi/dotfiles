@@ -14,6 +14,8 @@ call vundle#rc()
 " Plugins
 " =======
 
+" Good starting point for plugins: https://vimawesome.com/
+
 " If there is a slash in the bundle-name
 " it automatically installs from GitHub.
 Plugin 'gmarik/vundle'
@@ -108,6 +110,7 @@ set viminfo^=%      " remember info about open buffers on close
 
 " Persist undo across session
 " ===========================
+
 if has("persistent_undo")
     set undodir=~/.vim/undodir
     set undofile
@@ -136,7 +139,7 @@ augroup END
 " ===========
 
 set t_Co=256
-silent! colorscheme neodark
+silent! colorscheme neodark " silent! mutes error messages
 let g:airline_theme = 'neodark'
 
 " Highlight stuff we don't want
