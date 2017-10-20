@@ -113,8 +113,8 @@ if has("persistent_undo")
     set undofile
 endif
 
-" Move cursoer to last edit position
-" ==================================
+" Move cursor to last edit position
+" =================================
 
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
