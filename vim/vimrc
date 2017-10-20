@@ -22,6 +22,7 @@ Plugin 'gmarik/vundle'
 Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-surround'
 Plugin 'ngmy/vim-rubocop'
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -33,6 +34,7 @@ Plugin 'slim-template/vim-slim'
 Plugin 'dyng/ctrlsf.vim'
 Plugin 'hashivim/vim-terraform'
 Plugin 'Glench/Vim-Jinja2-Syntax'
+Plugin 'valloric/youcompleteme'
 
 call vundle#end()
 
@@ -56,6 +58,9 @@ let g:vim_json_syntax_conceal=0
 
 " ctrlp: ignore source control files
 let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_extensions = ['tag']
+
+let g:ctrlsf_default_root='project+ww'
 
 " Searching
 " =========
@@ -75,7 +80,7 @@ endif
 " ==========
 
 " F5 searches word where cursor is currently at
-nmap <F5> <Plug>CtrlSFPrompt <C-R><C-W> *<CR>
+nmap <C-f> <Plug>CtrlSFCwordExec
 
 " General configuration
 " =====================
@@ -140,6 +145,7 @@ augroup END
 " ===========
 
 set t_Co=256
+set background=dark
 silent! colorscheme neodark " silent! mutes error messages
 let g:airline_theme = 'neodark'
 
