@@ -1,0 +1,155 @@
+" List of nice vimrc files out there:
+" * https://github.com/pengwynn/dotfiles/blob/master/vim/vimrc.symlink
+" * https://github.com/christoomey/dotfiles/tree/master/vim => nice approach about splitting the config file
+
+set nocompatible " be iMproved!
+
+" Vundle manager config
+" =====================
+
+filetype off " required for vundle (only set temporarily, see below)
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" Plugins
+" =======
+
+" If there is a slash in the bundle-name
+" it automatically installs from GitHub.
+Plugin 'gmarik/vundle'
+Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tpope/vim-fugitive'
+Plugin 'ngmy/vim-rubocop'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'sjl/gundo.vim'
+Plugin 'elzr/vim-json'
+Plugin 'KeitaNakamura/neodark.vim'
+Plugin 'vim-airline/vim-airline'
+Plugin 'slim-template/vim-slim'
+Plugin 'dyng/ctrlsf.vim'
+Plugin 'hashivim/vim-terraform'
+Plugin 'Glench/Vim-Jinja2-Syntax'
+
+call vundle#end()
+
+filetype plugin indent on " re-enable filetype detection after vundle config
+
+" Configure installed plugins
+" ===========================
+
+" Use the |:sign| interface to mark syntax errors
+let g:syntastic_enable_signs=1
+let g:syntastic_python_checkers=['flake8']
+let g:syntastic_python_flake8_args='--max-complexity=10'
+
+" When set to 1 the error window will be automatically
+" opened when errors are detected, and closed when none
+" are detected.
+let g:syntastic_auto_loc_list=0
+
+" Disable vim-json concealing - we want to see the file as it is
+let g:vim_json_syntax_conceal=0
+
+" ctrlp: ignore source control files
+let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn)$'
+
+" Searching
+" =========
+
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
+
+" Key remaps
+" ==========
+
+" F5 searches word where cursor is currently at
+nmap <F5> <Plug>CtrlSFPrompt <C-R><C-W> *<CR>
+
+" General configuration
+" =====================
+
+syntax enable
+
+set encoding=utf-8  "
+set nonumber        " disable line numbers (they distract me)
+set tabstop=2       "
+set softtabstop=2   "
+set shiftwidth=2    " display tabs with 2 chars width
+set textwidth=120   " max texwidth before auto skipping to next line
+set smarttab        "
+set expandtab       " insert spaces when you press tab
+set smartindent     " indent based on syntax
+set ruler           " display ruler (line/column/position) on bottom right
+set ttyfast         " smoother redrawing - assumes a fast (ssh) connection is present
+set autoread        " if file hasn't been changed by vim but from outside, reload
+set more            " enable paging for listings
+set backspace=2     " make backspace work like most other apps
+set hlsearch        " highlight search results
+set incsearch       " highlight searches while you type
+set magic           " for regular expressions turn magic on
+set scrolloff=7     " scroll as soon as cursor to top/bottome reaches 7 lines
+set timeoutlen=500  " no delay when switching modes with ESC
+set noerrorbells    " no sound
+set novisualbell    " no flashing
+set showmatch       " show matching brackets when text indicator is over them
+set matchtime=2     " how many tenths of a second to blink when matching brackets
+set laststatus=2    " always display status line
+set history=500     " remember the last 500 commands => q: to list them
+set viminfo^=%      " remember info about open buffers on close
+
+" Persist undo across session
+" ===========================
+if has("persistent_undo")
+    set undodir=~/.vim/undodir
+    set undofile
+endif
+
+" Move cursoer to last edit position
+" ==================================
+
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \ exe "normal! g`\"" |
+     \ endif
+
+" Activate cursorline, but only for active window
+" ===============================================
+
+set cursorline
+
+augroup CursorLineOnlyInActiveWindow
+  autocmd!
+  autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+  autocmd WinLeave * setlocal nocursorline
+augroup END
+
+" Colorschemes
+" ===========
+
+set t_Co=256
+silent! colorscheme neodark
+let g:airline_theme = 'neodark'
+
+" Highlight stuff we don't want
+" =============================
+
+highlight UnwantedChars ctermbg=red guibg=red
+match UnwantedChars  /\s\+$/
+call matchadd('UnwantedChars', '\t')
+call matchadd('UnwantedChars', '<Ctrl-V><Ctrl-M>')
+
+" Check local vimrc (optional)
+" ============================
+
+if filereadable(".lvimrc")
+    so .lvimrc
+endif
